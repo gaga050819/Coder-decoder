@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кодувач</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 450px;
+            animation: fadeIn 0.8s ease-out;
+            border: 1px solid #334155;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 16px;
+            padding: 15px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            resize: none;
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 1rem;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+            transform: scale(1.01);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .enc-btn { background: #6366f1; color: white; }
+        .dec-btn { background: #10b981; color: white; }
+        
+        button:hover {
+            filter: brightness(1.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active { transform: translateY(0); }
+
+        .copy-btn {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #334155;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            border-color: #6366f1;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        .result-label {
+            display: block;
+            margin: 10px 0;
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Кодувач</h2>
+    
+    <textarea id="in" placeholder="Введіть текст..."></textarea>
+    
+    <div class="btn-group">
+        <button class="enc-btn" onclick="run(5)">🔒 Код</button>
+        <button class="dec-btn" onclick="run(-5)">🔓 Декод</button>
+    </div>
+
+    <span class="result-label">Результат</span>
+    <textarea id="out" readonly placeholder="Тут буде магія..."></textarea>
+    
+    <button class="copy-btn" onclick="copy()">Копіювати результат</button>
+</div>
+
+<script>
+    function run(s) {
+        const input = document.getElementById('in');
+        const output = document.getElementById('out');
+        
+        // Анімація при натисканні
+        output.style.opacity = "0";
+        
+        setTimeout(() => {
+            let res = '';
+            for (let i = 0; i < input.value.length; i++) {
+                res += String.fromCharCode(input.value.charCodeAt(i) + s);
+            }
+            output.value = res;
+            output.style.opacity = "1";
+        }, 150);
+    }
+
+    function copy() {
+        const out = document.getElementById('out');
+        if (!out.value) return;
+        
+        navigator.clipboard.writeText(out.value);
+        const btn = document.querySelector('.copy-btn');
+        const oldText = btn.innerText;
+        btn.innerText = "✅ Скопійовано!";
+        btn.style.borderColor = "#10b981";
+        
+        setTimeout(() => {
+            btn.innerText = oldText;
+            btn.style.borderColor = "#334155";
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
